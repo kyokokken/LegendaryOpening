@@ -26,6 +26,7 @@ public class GUI {
   private JComboBox cmbTrackers;
   private JButton btnDeleteCurrentTracker;
   private int currentSelectedTrackerIndex;
+  private JFrame frame;
 
 
   public GUI(App app) {
@@ -75,6 +76,22 @@ public class GUI {
         update();
       }
     });
+
+    // Add 1 Opened Pack
+    btnIncreaseOpenedPacks.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        app.getTracker(currentSelectedTrackerIndex).addOneOpenedPack();
+        update();
+      }
+    });
+
+    // Add 1 Opened Legendary
+    btnIncreaseOpenedLegendaries.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        app.getTracker(currentSelectedTrackerIndex).addOneOpenedLegendary();
+        update();
+      }
+    });
   }
 
   public void update() {
@@ -85,7 +102,7 @@ public class GUI {
       lblOpenedPacksValue
           .setText(String.valueOf(app.getTracker(currentSelectedTrackerIndex).getOpenedPacks()));
       lblLegendaryChanceValue.setText(
-          String.valueOf(app.getTracker(currentSelectedTrackerIndex).getNextPackLegendaryChance()));
+          String.valueOf(String.format("%.2f%%", (app.getTracker(currentSelectedTrackerIndex).getNextPackLegendaryChance() * 100))));
     } else {
       enableTrackerUI(false);
     }
@@ -96,6 +113,9 @@ public class GUI {
       btnDeleteCurrentTracker.setEnabled(false);
     } else {
       btnDeleteCurrentTracker.setEnabled(true);
+    }
+    if (frame != null) {
+      frame.pack();
     }
   }
 
@@ -110,7 +130,7 @@ public class GUI {
   }
 
   private void createFrame() {
-    JFrame frame = new JFrame();
+    frame = new JFrame();
     frame.setContentPane(pnlContent);
     frame.pack();
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
